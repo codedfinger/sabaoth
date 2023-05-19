@@ -22,9 +22,13 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Deploy frontend
+          name: Deploy frontend to instance 1
           command: |
-            aws ec2 cp frontend/build/ ec2-instance-ip:/var/www/html
+            aws ec2 cp frontend/build/ 10.0.102.202:/var/www/html
+      - run:
+        name: Deploy frontend to instance 2
+        command: |
+          aws ec2 cp frontend/build/ 10.0.101.157:/var/www/html
 
   build_backend:
     docker:
