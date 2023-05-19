@@ -1,13 +1,4 @@
 version: 2.1
-workflows:
-  version: 2
-  build_and_deploy:
-    jobs:
-      - build_frontend:
-      - deploy_frontend:
-      - build_backend:
-      - deploy_backend:
-
 jobs:
   build_frontend:
     docker:
@@ -56,3 +47,12 @@ jobs:
           command: |
             cd backend
             ./deploy.sh
+
+workflows:
+  version: 2
+  build_and_deploy:
+    jobs:
+      - build_frontend
+      - deploy_frontend
+      - build_backend
+      - deploy_backend
