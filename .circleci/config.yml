@@ -22,10 +22,10 @@ jobs:
     steps:
       - checkout
       - run:
-        name: Install SSH and SCP
-        command: |
-          sudo apt-get update
-          sudo apt-get install -y openssh-client
+          name: Install SSH and SCP
+          command: |
+            sudo apt-get update
+            sudo apt-get install -y openssh-client
       - run:
           name: Deploy frontend to instance 1
           command: |
@@ -48,15 +48,14 @@ jobs:
     steps:
       - checkout
       - run:
-        name: Install SSH and SCP
-        command: |
-          sudo apt-get update
-          sudo apt-get install -y openssh-client
+          name: Install SSH and SCP
+          command: |
+            sudo apt-get update
+            sudo apt-get install -y openssh-client
       - run:
           name: Deploy backend
           command: |
             .circleci/deploy_backend.sh
-
 
 workflows:
   version: 2
