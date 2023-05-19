@@ -1,6 +1,15 @@
 version: 2.1
+workflows:
+  version: 2
+  build_and_deploy:
+    jobs:
+      - build_frontend:
+      - deploy_frontend:
+      - build_backend:
+      - deploy_backend:
+
 jobs:
-  build_and_deploy_frontend:
+  build_frontend:
     docker:
       - image: circleci/node:latest
     steps:
@@ -15,12 +24,18 @@ jobs:
           command: |
             cd frontend
             npm run build
+
+  deploy_frontend:
+    docker:
+      - image: amazon/aws-cli:2.x
+    steps:
+      - checkout
       - run:
           name: Deploy frontend
           command: |
             aws ec2 cp frontend/build/ ec2-instance-ip:/var/www/html
 
-  build_and_deploy_backend:
+  build_backend:
     docker:
       - image: node:14
     steps:
@@ -30,6 +45,12 @@ jobs:
           command: |
             cd backend
             npm install
+
+  deploy_backend:
+    docker:
+      - image: amazon/aws-cli:2.x
+    steps:
+      - checkout
       - run:
           name: Deploy backend
           command: |
