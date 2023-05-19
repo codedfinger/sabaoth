@@ -1,72 +1,37 @@
-#build frontend
 version: 2.1
 jobs:
-  build_frontend:
+  build_and_deploy_frontend:
     docker:
       - image: circleci/node:latest
     steps:
       - checkout
       - run:
-          name: Install dependencies
+          name: Install frontend dependencies
           command: |
-            cd frontend 
+            cd frontend
             npm install
       - run:
           name: Build frontend
           command: |
-            cd frontend 
-            npm run build  # Build the frontend
-
-# deploy frontend
-version: 2.1
-jobs:
-  deploy_frontend:
-    docker:
-      - image: amazon/aws-cli:2.x
-    steps:
-      - checkout
+            cd frontend
+            npm run build
       - run:
           name: Deploy frontend
-          command: aws ec2 cp frontend/build/ ec2-instance-ip:/var/www/html
+          command: |
+            aws ec2 cp frontend/build/ ec2-instance-ip:/var/www/html
 
-#build backend
-version: 2.1
-jobs:
-  build_backend:
+  build_and_deploy_backend:
     docker:
       - image: node:14
     steps:
       - checkout
       - run:
-          name: Install dependencies
+          name: Install backend dependencies
           command: |
             cd backend
             npm install
-
-#deploy backend
-version: 2.1
-jobs:
-  deploy_backend:
-    docker:
-      - image: amazon/aws-cli:2.x
-    steps:
-      - checkout
       - run:
           name: Deploy backend
           command: |
-            cd backend  # Specify the directory of your backend code
-            ./deploy.sh  # Replace with the actual deployment script or commands
-
-
-# #deploy database
-# version: 2.1
-# jobs:
-#   deploy_database:
-#     docker:
-#       - image: your-database-deployment-tool-image
-#     steps:
-#       - checkout
-#       - run:
-#           name: Deploy database
-#           command: |
-#             # Commands to deploy the database
+            cd backend
+            ./deploy.sh
