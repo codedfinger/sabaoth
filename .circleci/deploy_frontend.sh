@@ -9,4 +9,4 @@ SUBNET_ID="$SUBNET_ID"  # Replace with the ID of the subnet where your EC2 insta
 ssh -o StrictHostKeyChecking=no -i -v ubuntu@52.23.164.165 "sudo mkdir -p /var/www/html"
 
 # Connect to the EC2 instance and restart the Express app
-scp -o StrictHostKeyChecking=no -i -r frontend/dist/* ubuntu@52.23.164.165:/var/www/html/
+scp -o StrictHostKeyChecking=no -i -r frontend/dist/ ubuntu@52.23.164.165:/var/www/html/
