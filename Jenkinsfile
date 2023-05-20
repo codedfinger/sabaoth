@@ -7,5 +7,11 @@ pipeline {
                 echo 'This is a simple task'
             }
         }
+
+        stage('Clone Repository') {
+            steps {
+                git url: 'https://github.com/your-repo.git'
+            }
+        }
     }
 }
