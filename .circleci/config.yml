@@ -60,6 +60,7 @@ jobs:
           command: |
             sudo apt update
             sudo apt install -y openssh-client
+            sudo apt install npm
       - run:
           name: Deploy backend
           command: |
