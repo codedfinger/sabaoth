@@ -44,3 +44,5 @@ yarn-error.log*
 
 #terraform
 terraform/
+te/
+new/
