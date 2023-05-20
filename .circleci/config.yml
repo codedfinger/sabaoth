@@ -23,7 +23,8 @@ jobs:
     docker:
       - image: circleci/node:latest
     environment:
-    SSH_PRIVATE_KEY: $SSH_PRIVATE_KEY  # Add this line to define the SSH_PRIVATE_KEY environment variable
+      SSH_PRIVATE_KEY: $SSH_PRIVATE_KEY
+      INSTANCE_IP_WEB: $INSTANCE_IP_WEB
     steps:
       - checkout
       - run:
@@ -53,6 +54,9 @@ jobs:
   deploy_backend:
     docker:
       - image: circleci/node:latest
+    environment:
+      SSH_PRIVATE_KEY: $SSH_PRIVATE_KEY
+      INSTANCE_IP_WEB: $INSTANCE_IP_WEB
     steps:
       - checkout
       - run:
