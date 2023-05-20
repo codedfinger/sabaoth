@@ -26,7 +26,7 @@ pipeline {
             steps {
                 dir('backend') {
                     // sh 'npm run test'
-                    echo "Backend Tests"
+                    echo "Backend the Tests"
                 }
             }
         }
@@ -34,7 +34,7 @@ pipeline {
             steps {
                 dir('frontend') {
                     // sh 'npm run test'
-                    echo "Frontend Tests"
+                    echo "Frontend the Tests"
                 }
             }
         }
