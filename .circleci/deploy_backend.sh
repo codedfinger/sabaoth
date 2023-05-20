@@ -9,4 +9,4 @@ SUBNET_ID="$SUBNET_ID"  # Replace with the ID of the subnet where your EC2 insta
 scp -o StrictHostKeyChecking=no -i -r backend/* ubuntu@52.23.164.165:/home/ubuntu/backend
 
 # Connect to the EC2 instance and restart the Express app
-ssh -o StrictHostKeyChecking=no -i -v ubuntu@52.23.164.165 "cd /home/ubuntu/backend && npm install && pm2 start index.js"
+ssh -o StrictHostKeyChecking=no -i -v ubuntu@52.23.164.165 "sudo mkdir -p /home/ubuntu/backend && cd /home/ubuntu/backend && npm install && pm2 start index.js"
