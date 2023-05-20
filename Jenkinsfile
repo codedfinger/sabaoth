@@ -1,6 +1,8 @@
 pipeline {
-    agent any
-
+   agent any
+    tools {
+        nodejs 'nodejs'
+    }
     stages {
         stage('Simple Task') {
             steps {
@@ -8,9 +10,12 @@ pipeline {
             }
         }
 
-        stage('Clone Repository') {
+        stage('Test - Backend') {
             steps {
-                git url: 'https://github.com/your-repo.git'
+                dir('backend') {
+                    // sh 'npm run test'
+                    echo "Backend Tests"
+                }
             }
         }
     }
