@@ -4,7 +4,7 @@ pipeline {
         nodejs 'nodejs'
     }
     parameters {
-        choice(name:'VERSION', choices:['1.0', '1.1', '1.2'], description:'Choose the version of the project')
+        choice(name:'VERSION', choices:['1.0', '1.1', '1.2'], description:'deployment pipeline')
         booleanParam(name:'executeTests', description:'Execute the tests', defaultValue:false)
     }
     stages {
