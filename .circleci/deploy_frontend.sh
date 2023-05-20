@@ -5,8 +5,12 @@ INSTANCE_IP="$EC2_INSTANCE_IP_WEB"  # Replace with the IP address of your EC2 in
 SSH_PRIVATE_KEY="$SSH_PRIVATE_KEY"  # Replace with the path to your SSH key file
 SUBNET_ID="$SUBNET_ID"  # Replace with the ID of the subnet where your EC2 instance resides
 
+echo "$SSH_PRIVATE_KEY" > sabaoth.pem
+
+chmod 400 sabaoth.pem
+
 # Copy the built files to the EC2 instance
-ssh -o StrictHostKeyChecking=no -i "$SSH_PRIVATE_KEY" -v ubuntu@"$INSTANCE_IP" "sudo mkdir -p /var/www/html"
+ssh -o StrictHostKeyChecking=no -i sabaoth.pem -v ubuntu@"$INSTANCE_IP" "sudo mkdir -p /var/www/html"
 
 # Connect to the EC2 instance and restart the Express app
-scp -o StrictHostKeyChecking=no -i "$SSH_PRIVATE_KEY" -r frontend/build/* ubuntu@"$INSTANCE_IP":/var/www/html/
+scp -o StrictHostKeyChecking=no -i sabaoth.pem -r frontend/build/* ubuntu@"$INSTANCE_IP":/var/www/html/
