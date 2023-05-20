@@ -35,6 +35,8 @@ jobs:
       - run:
           name: Deploy frontend to instance 1
           command: |
+            echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+            chmod 600 ~/.ssh/id_rsa
             .circleci/deploy_frontend.sh
 
   build_backend:
@@ -67,6 +69,8 @@ jobs:
       - run:
           name: Deploy backend
           command: |
+            echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+            chmod 600 ~/.ssh/id_rsa
             .circleci/deploy_backend.sh
 
 workflows:
