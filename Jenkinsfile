@@ -69,22 +69,20 @@ pipeline {
         // }
         stage('Deploy - Frontend') {
             steps {
-                script {
-                    def sshKey = credentials('skey')  // Update the credential ID if needed
-                    
+                script {                    
                     // Copy the files to the remote server
-                    sshagent(credentials: [sshKey]) {
+                     sshagent(['skey']) {
                         sh "scp -r frontend/build ubuntu@3.88.152.217:/var/www/html"
                     }
                     
                     // Set appropriate permissions on the remote server
-                    sshagent(credentials: [sshKey]) {
+                    sshagent(['skey']) {
                         sh "ssh -o StrictHostKeyChecking=no ubuntu@3.88.152.217 'sudo chown -R www-data:www-data /var/www/html'"
                         sh "ssh -o StrictHostKeyChecking=no ubuntu@3.88.152.217 'sudo chmod -R 755 /var/www/html'"
                     }
                     
                     // Restart Apache on the remote server
-                    sshagent(credentials: [sshKey]) {
+                    sshagent(['skey']) {
                         sh "ssh -o StrictHostKeyChecking=no ubuntu@3.88.152.217 'sudo service apache2 restart'"
                     }
                 }
