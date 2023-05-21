@@ -47,8 +47,8 @@ pipeline {
                 dir('frontend') {
                     script  {
                         sshagent(['skey']) {
-                            sh "ssh ubuntu@3.88.152.217 'mkdir -p /home/ubuntu/frontend'"
-                            sh "scp -r * ubuntu@3.88.152.217:/home/ubuntu/frontend"
+                            sh "ssh ubuntu@34.227.151.221 'sudo mkdir -p /home/ubuntu/frontend'"
+                            sh "scp -r * ubuntu@34.227.151.221:/home/ubuntu/frontend"
                         }
                     }
                 }
@@ -68,22 +68,20 @@ pipeline {
             steps {
                 script {                    
                     // Copy the files to the remote server
-                     sshagent(['skey']) {
-                        sh "ssh ubuntu@3.88.152.217 'mkdir -p /home/ubuntu/frontend'"
-                        sh "scp -r * ubuntu@3.88.152.217:/home/ubuntu/frontend"                        
-                        sh "ssh ubuntu@3.88.152.217 'cd frontend && sudo cp -r * /var/www/html'"
+                     sshagent(['skey']) {                        
+                        sh "ssh ubuntu@34.227.151.221 'cd frontend && sudo cp -r * /var/www/html'"
                         // sh "scp -r * ubuntu@3.88.152.217:/var/www/html"
                     }
                     
                     // Set appropriate permissions on the remote server
                     sshagent(['skey']) {
-                        sh "ssh -o StrictHostKeyChecking=no ubuntu@54.89.212.148 'sudo chown -R www-data:www-data /var/www/html'"
-                        sh "ssh -o StrictHostKeyChecking=no ubuntu@3.88.152.217 'sudo chmod -R 755 /var/www/html'"
+                        sh "ssh -o StrictHostKeyChecking=no ubuntu@34.227.151.221 'sudo chown -R www-data:www-data /var/www/html'"
+                        sh "ssh -o StrictHostKeyChecking=no ubuntu@34.227.151.221 'sudo chmod -R 755 /var/www/html'"
                     }
                     
                     // Restart Apache on the remote server
                     sshagent(['skey']) {
-                        sh "ssh -o StrictHostKeyChecking=no ubuntu@3.88.152.217 'sudo service nginx restart'"
+                        sh "ssh -o StrictHostKeyChecking=no ubuntu@34.227.151.221 'sudo service nginx restart'"
                     }
                 }
             }
