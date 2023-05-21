@@ -52,11 +52,8 @@ pipeline {
         stage('Build Image - Frontend') {
             steps {
                 dir('frontend') {
-                    withCredentials([usernamePassword(credentialsId: 'hub.docker.com', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
-                        sh 'docker build -t codedfingers/sabaoth-frontend .'
-                        sh "echo $PASS | docker login -u $USER --password-stdin"
-                        sh 'docker push codedfingers/sabaoth-frontend'
-                    }
+                    sh 'npm install'
+                    sh 'npm run build' // Add the build step
                 }
             }
         }
@@ -73,9 +70,22 @@ pipeline {
         stage('Deploy - Frontend') {
             steps {
                 script {
-                    def dockerCmd = 'sudo docker run -p 3000:3000 -d codedfingers/sabaoth-frontend:latest'
-                    sshagent(['skey']) {
-                        sh "ssh -o StrictHostKeyChecking=no ubuntu@3.88.152.217 ${dockerCmd}"
+                    def sshKey = credentials('skey')  // Update the credential ID if needed
+                    
+                    // Copy the files to the remote server
+                    sshagent(credentials: [sshKey]) {
+                        sh "scp -r frontend/build ubuntu@3.88.152.217:/var/www/html"
+                    }
+                    
+                    // Set appropriate permissions on the remote server
+                    sshagent(credentials: [sshKey]) {
+                        sh "ssh -o StrictHostKeyChecking=no ubuntu@3.88.152.217 'sudo chown -R www-data:www-data /var/www/html'"
+                        sh "ssh -o StrictHostKeyChecking=no ubuntu@3.88.152.217 'sudo chmod -R 755 /var/www/html'"
+                    }
+                    
+                    // Restart Apache on the remote server
+                    sshagent(credentials: [sshKey]) {
+                        sh "ssh -o StrictHostKeyChecking=no ubuntu@3.88.152.217 'sudo service apache2 restart'"
                     }
                 }
             }
