@@ -53,9 +53,9 @@ pipeline {
             steps {
                 dir('frontend') {
                     withCredentials([usernamePassword(credentialsId: 'hub.docker.com', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
-                        sh 'sudo docker build -t codedfingers/sabaoth-frontend .'
+                        sh 'docker build -t codedfingers/sabaoth-frontend .'
                         sh "echo $PASS | docker login -u $USER --password-stdin"
-                        sh 'sudo docker push codedfingers/sabaoth-frontend'
+                        sh 'docker push codedfingers/sabaoth-frontend'
                     }
                 }
             }
@@ -73,7 +73,7 @@ pipeline {
         stage('Deploy - Frontend') {
             steps {
                 script {
-                    def dockerCmd = 'sudo docker run -p 3000:3000 -d codedfingers/sabaoth-frontend:latest'
+                    def dockerCmd = 'docker run -p 3000:3000 -d codedfingers/sabaoth-frontend:latest'
                     sshagent(['skey']) {
                         sh "ssh -o StrictHostKeyChecking=no ubuntu@3.88.152.217 ${dockerCmd}"
                     }
