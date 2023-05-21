@@ -48,7 +48,7 @@ pipeline {
                     script  {
                         sshagent(['skey']) {
                             sh "ssh -o StrictHostKeyChecking=no ubuntu@34.227.151.221 'sudo mkdir -p /home/ubuntu/frontend'"
-                            sh "scp -r * ubuntu@34.227.151.221:/home/ubuntu/frontend"
+                            sh "scp -r * ubuntu@34.227.151.221:frontend"
                         }
                     }
                 }
@@ -69,7 +69,7 @@ pipeline {
                 script {                    
                     // Copy the files to the remote server
                      sshagent(['skey']) {                        
-                        sh "ssh -o StrictHostKeyChecking=no ubuntu@34.227.151.221 'cd frontend && sudo cp -r * /var/www/html'"
+                        sh "ssh -o StrictHostKeyChecking=no ubuntu@34.227.151.221 'cd /frontend && sudo cp -r * /var/www/html'"
                         // sh "scp -r * ubuntu@3.88.152.217:/var/www/html"
                     }
                     
