@@ -75,7 +75,7 @@ pipeline {
                 script {
                     def dockerCmd = 'docker run -p 3000:3000 -d codedfingers/sabaoth-frontend:latest'
                     sshagent(['skey']) {
-                        sh "ssh -o StrictHostKeyChecking=no ec2-user@3.88.152.217 ${dockerCmd}"
+                        sh "ssh -o StrictHostKeyChecking=no ubuntu@3.88.152.217 ${dockerCmd}"
                     }
                 }
             }
