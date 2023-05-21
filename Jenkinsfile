@@ -47,7 +47,8 @@ pipeline {
                 dir('frontend') {
                     script  {
                         sshagent(['skey']) {
-                            sh "ssh -o StrictHostKeyChecking=no ubuntu@54.89.212.148 'sudo mkdir -p /frontend'"
+                            sh "ssh ubuntu@3.88.152.217 'mkdir -p /home/ubuntu/frontend'"
+                            sh "scp -r * ubuntu@3.88.152.217:/home/ubuntu/frontend"
                         }
                     }
                 }
@@ -63,27 +64,29 @@ pipeline {
         //         }
         //     }
         // }
-        // stage('Deploy - Frontend') {
-        //     steps {
-        //         script {                    
-        //             // Copy the files to the remote server
-        //              sshagent(['skey']) {
-        //                 sh "ssh ubuntu@3.88.152.217 'cd frontend && sudo cp -r * /var/www/html'"
-        //                 // sh "scp -r * ubuntu@3.88.152.217:/var/www/html"
-        //             }
+        stage('Deploy - Frontend') {
+            steps {
+                script {                    
+                    // Copy the files to the remote server
+                     sshagent(['skey']) {
+                        sh "ssh ubuntu@3.88.152.217 'mkdir -p /home/ubuntu/frontend'"
+                        sh "scp -r * ubuntu@3.88.152.217:/home/ubuntu/frontend"                        
+                        sh "ssh ubuntu@3.88.152.217 'cd frontend && sudo cp -r * /var/www/html'"
+                        // sh "scp -r * ubuntu@3.88.152.217:/var/www/html"
+                    }
                     
-        //             // Set appropriate permissions on the remote server
-        //             sshagent(['skey']) {
-        //                 sh "ssh -o StrictHostKeyChecking=no ubuntu@54.89.212.148 'sudo chown -R www-data:www-data /var/www/html'"
-        //                 sh "ssh -o StrictHostKeyChecking=no ubuntu@54.89.212.148 'sudo chmod -R 755 /var/www/html'"
-        //             }
+                    // Set appropriate permissions on the remote server
+                    sshagent(['skey']) {
+                        sh "ssh -o StrictHostKeyChecking=no ubuntu@54.89.212.148 'sudo chown -R www-data:www-data /var/www/html'"
+                        sh "ssh -o StrictHostKeyChecking=no ubuntu@3.88.152.217 'sudo chmod -R 755 /var/www/html'"
+                    }
                     
-        //             // Restart Apache on the remote server
-        //             sshagent(['skey']) {
-        //                 sh "ssh -o StrictHostKeyChecking=no ubuntu@54.89.212.148 'sudo service apache2 restart'"
-        //             }
-        //         }
-        //     }
-        // }
+                    // Restart Apache on the remote server
+                    sshagent(['skey']) {
+                        sh "ssh -o StrictHostKeyChecking=no ubuntu@3.88.152.217 'sudo service nginx restart'"
+                    }
+                }
+            }
+        }
     }
 }
