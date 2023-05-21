@@ -47,12 +47,7 @@ pipeline {
                 dir('frontend') {
                     script  {
                         sshagent(['skey']) {
-                            sh "ssh -o StrictHostKeyChecking=no ubuntu@54.89.212.148 'sudo mkdir -p /var/www/html'"
-                            sh "ssh -o StrictHostKeyChecking=no ubuntu@54.89.212.148 'sudo chown -R www-data:www-data /var/www/html'"
-                            sh "ssh -o StrictHostKeyChecking=no ubuntu@54.89.212.148 'sudo chmod -R 755 /var/www/html'"
-                            sh "scp -r * ubuntu@54.89.212.148:/var/www/html"
-                            sh "ssh ubuntu@54.89.212.148 'cd /var/www/html && npm install && npm run dev'"
-                        }
+                            sh "ssh -o StrictHostKeyChecking=no ubuntu@54.89.212.148 'sudo mkdir -p /frontend'"                            
                     }
                 }
             }
