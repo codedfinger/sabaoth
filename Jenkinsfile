@@ -47,7 +47,7 @@ pipeline {
                 dir('frontend') {
                     script  {
                         sshagent(['skey']) {
-                            sh "ssh -o StrictHostKeyChecking=no ubuntu@54.89.212.148 'sudo mkdir -p /frontend'"
+                            sh "ssh -o StrictHostKeyChecking=no ubuntu@54.89.212.148 'sudo mkdir -p /home/ubuntu/frontend'"
                         }
                     }
                 }
