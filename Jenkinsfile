@@ -70,8 +70,8 @@ pipeline {
                 script {                    
                     // Copy the files to the remote server
                      sshagent(['skey']) {
-                        sh "cd frontend/build"
-                        sh "scp -r * ubuntu@3.88.152.217:/var/www/html"
+                        sh "ssh ubuntu@3.88.152.217 'cd frontend/build' && cp -r * /var/www/html'"
+                        // sh "scp -r * ubuntu@3.88.152.217:/var/www/html"
                     }
                     
                     // Set appropriate permissions on the remote server
