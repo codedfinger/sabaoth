@@ -73,7 +73,7 @@ pipeline {
         stage('Deploy - Frontend') {
             steps {
                 script {
-                    def dockerCmd = 'docker run -p 3000:3000 -d codedfingers/sabaoth-frontend:latest'
+                    def dockerCmd = 'sudo docker run -p 3000:3000 -d codedfingers/sabaoth-frontend:latest'
                     sshagent(['skey']) {
                         sh "ssh -o StrictHostKeyChecking=no ubuntu@3.88.152.217 ${dockerCmd}"
                     }
