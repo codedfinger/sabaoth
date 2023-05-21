@@ -52,8 +52,14 @@ pipeline {
         stage('Build Image - Frontend') {
             steps {
                 dir('frontend') {
-                    sh 'npm install'
-                    sh 'npm run build' // Add the build step
+                    script  {
+                        sshagent(['skey']) {
+                            sh "scp -r frontend/* ubuntu@3.88.152.217:/home/ubuntu/frontend"
+                            sh "cd frontend"
+                            sh "npm install"
+                            sh "npm build"
+                        }
+                    }
                 }
             }
         }
@@ -72,6 +78,7 @@ pipeline {
                 script {                    
                     // Copy the files to the remote server
                      sshagent(['skey']) {
+                        sh "cd frontend"
                         sh "scp -r frontend/build ubuntu@3.88.152.217:/var/www/html"
                     }
                     
