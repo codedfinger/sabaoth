@@ -54,10 +54,8 @@ pipeline {
                 dir('frontend') {
                     script  {
                         sshagent(['skey']) {
-                            sh "scp -r frontend/* ubuntu@3.88.152.217:/home/ubuntu/frontend"
-                            sh "cd frontend"
-                            sh "npm install"
-                            sh "npm build"
+                            sh "scp -r . ubuntu@3.88.152.217:/home/ubuntu/frontend"
+                            sh "ssh ubuntu@3.88.152.217 'cd /home/ubuntu/frontend && npm install && npm run build'"
                         }
                     }
                 }
