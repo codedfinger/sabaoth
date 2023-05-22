@@ -47,7 +47,7 @@ pipeline {
                 dir('frontend') {
                     script  {
                         sshagent(['skey']) {
-                            sh "scp -o StrictHostKeyChecking=no -r * ubuntu@54.175.133.10:/home/ubuntu/"
+                            sh "scp -o StrictHostKeyChecking=no -r * ubuntu@44.203.202.27:/home/ubuntu/"
                         }
                     }
                 }
@@ -68,19 +68,19 @@ pipeline {
                 script {                    
                     // Copy the files to the remote server
                      sshagent(['skey']) {                        
-                        sh "ssh -o StrictHostKeyChecking=no ubuntu@54.175.133.10 'sudo cp -r * /var/www/html'"
+                        sh "ssh -o StrictHostKeyChecking=no ubuntu@44.203.202.27 'sudo npm install && sudo pm2 start npm --name \"saba\" -- start'"
                         // sh "scp -r * ubuntu@3.88.152.217:/var/www/html"
                     }
                     
                     // Set appropriate permissions on the remote server
                     sshagent(['skey']) {
-                        sh "ssh -o StrictHostKeyChecking=no ubuntu@54.175.133.10 'sudo chown -R www-data:www-data /var/www/html'"
-                        sh "ssh -o StrictHostKeyChecking=no ubuntu@54.175.133.10 'sudo chmod -R 755 /var/www/html'"
+                        sh "ssh -o StrictHostKeyChecking=no ubuntu@44.203.202.27 'sudo chown -R www-data:www-data /var/www/html'"
+                        sh "ssh -o StrictHostKeyChecking=no ubuntu@44.203.202.27 'sudo chmod -R 755 /var/www/html'"
                     }
                     
                     // Restart Apache on the remote server
                     sshagent(['skey']) {
-                        sh "ssh -o StrictHostKeyChecking=no ubuntu@54.175.133.10 'sudo service nginx restart'"
+                        sh "ssh -o StrictHostKeyChecking=no ubuntu@44.203.202.27 'sudo service nginx restart && sudo pm2 restart \"saba\"'"
                     }
                 }
             }
