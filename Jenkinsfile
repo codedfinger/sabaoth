@@ -47,7 +47,7 @@ pipeline {
                 dir('frontend') {
                     script  {
                         sshagent(['skey']) {
-                            sh "scp -o StrictHostKeyChecking=no-r * ubuntu@44.203.35.206:/home/ubuntu/"
+                            sh "scp -o StrictHostKeyChecking=no -r * ubuntu@44.203.35.206:/home/ubuntu/"
                         }
                     }
                 }
