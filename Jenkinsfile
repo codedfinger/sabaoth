@@ -8,79 +8,73 @@ pipeline {
         booleanParam(name:'executeTests', description:'Execute the tests', defaultValue:false)
     }
     stages {
-        // stage('Build - Backend') {
-        //     steps {
-        //         dir('backend') {
-        //             sh 'npm install'
-        //         }
-        //     }
-        // }
+
+        stage('Build Image - Frontend') {
+            steps {
+                dir('frontend') {
+                    script  {
+                        sshagent(['skey']) {
+                            sh "scp -o StrictHostKeyChecking=no -r * ubuntu@ip_addr_server:/home/ubuntu/"
+                        }
+                    }
+                }
+            }
+        }
+
+        stage('Build Image - Backend') {
+            steps {
+                dir('backend') {
+                    script  {
+                        sshagent(['skey']) {
+                            sh "scp -o StrictHostKeyChecking=no -r * ubuntu@ip_addr_server:/home/ubuntu/"
+                        }
+                    }
+                }
+            }
+        }
+
         stage('Test - Backend') {
             steps {
                 dir('backend') {
-                    // sh 'npm run test'
-                    echo "Backend Tests"
+                    sh 'npm run test'
                 }
             }
         }
         stage('Test - Frontend') {
             steps {
                 dir('frontend') {
-                    // sh 'npm run test'
-                    echo "Frontend Tests"
+                    sh 'npm run test'
                 }
             }
         }
-        // stage('Build Image - Backend') {
-        //     steps {
-        //         dir('backend') {
-        //             withCredentials([usernamePassword(credentialsId: '491e94cc-85e3-49b0-a658-8202e78e33b7', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
-        //                 sh 'docker build -t jennykibiri/sample-backend .'
-        //                 sh "echo $PASS | docker login -u $USER --password-stdin"
-        //                 sh 'docker push jennykibiri/sample-backend'
-        //             }
-        //         }
-        //     }
-        // }
-        stage('Build Image - Frontend') {
-            steps {
-                dir('frontend') {
-                    script  {
-                        sshagent(['skey']) {
-                            sh "scp -o StrictHostKeyChecking=no -r * ubuntu@44.203.202.27:/home/ubuntu/"
-                        }
-                    }
-                }
-            }
-        }
-        // stage('Deploy - Backend') {
-        //     steps {
-        //         script {
-        //             def dockerCmd = 'docker run -p 3000:3000 -d codedfingers/sabaoth-backend:latest'
-        //             sshagent(['0f5914ae-046f-4fb1-a2bb-4f719659ba1d']) {
-        //                 sh "ssh -o StrictHostKeyChecking=no ubuntu@52.23.164.165 ${dockerCmd}"
-        //             }
-        //         }
-        //     }
-        // }
+
         stage('Deploy - Frontend') {
             steps {
                 script {                    
-                    // Copy the files to the remote server
+                    // Install and run the app on the server
                      sshagent(['skey']) {                        
-                        sh "ssh -o StrictHostKeyChecking=no ubuntu@44.203.202.27 'sudo npm install && sudo pm2 start npm --name \"saba\" -- start'"
-                        // sh "scp -r * ubuntu@3.88.152.217:/var/www/html"
+                        sh "ssh -o StrictHostKeyChecking=no ubuntu@ip_addr_server 'sudo npm install && sudo pm2 start npm --name \"saba\" -- start'"
                     }
                     
-                    // Set appropriate permissions on the remote server
+                    // Restart Nginx on the remote server
                     sshagent(['skey']) {
-                        sh "ssh -o StrictHostKeyChecking=no ubuntu@44.203.202.27 'sudo chown -R www-data:www-data /var/www/html'"
-                        sh "ssh -o StrictHostKeyChecking=no ubuntu@44.203.202.27 'sudo chmod -R 755 /var/www/html'"
+                        sh "ssh -o StrictHostKeyChecking=no ubuntu@ip_addr_server 'sudo service nginx restart && sudo pm2 restart \"saba\"'"
+                    }
+                }
+            }
+        }
+
+        stage('Deploy - Backend') {
+            steps {
+                script {                    
+                    // Install and run the app on the server
+                     sshagent(['skey']) {                        
+                        sh "ssh -o StrictHostKeyChecking=no ubuntu@ip_addr_server 'sudo npm install && sudo pm2 start npm --name \"saba\" -- start'"
                     }
                     
-                    // Restart Apache on the remote server
+                    // Restart Nginx on the remote server
                     sshagent(['skey']) {
-                        sh "ssh -o StrictHostKeyChecking=no ubuntu@44.203.202.27 'sudo service nginx restart && sudo pm2 restart \"saba\"'"
+                        sh "ssh -o StrictHostKeyChecking=no ubuntu@ip_addr_server 'sudo service nginx restart && sudo pm2 restart \"saba\"'"
                     }
                 }
             }
