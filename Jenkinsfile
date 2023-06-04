@@ -1,83 +1,61 @@
 pipeline {
-    agent any
-    tools {
-        nodejs 'Nodejs'
+  agent any
+
+  stages {
+
+    stage('Checkout') {
+      steps {
+        // Checkout the repository
+        checkout scm
+      }
     }
-    parameters {
-        choice(name:'VERSION', choices:['1.0', '1.1', '1.2'], description:'Choose the version of the project')
-        booleanParam(name:'executeTests', description:'Execute the tests', defaultValue:false)
+
+    stage('Build') {
+      steps { 
+        dir ("frontend") {
+        // Load environment variables
+        script {
+            // Tag the Docker image
+            sh "docker build -t codedfingers/sabaoth-frontend:latest"
+            }
+        }     
+      }
     }
-    stages {
 
-        stage('Build Image - Frontend') {
-            steps {
-                dir('frontend') {
-                    script  {
-                        sshagent(['skey']) {
-                            sh "scp -o StrictHostKeyChecking=no -r * ubuntu@ip_addr_server:/home/ubuntu/"
-                        }
-                    }
-                }
+    stage('Tag') {
+      steps {
+        dir ("frontend") {
+            script {
+            // Tag the Docker image
+            sh "docker tag codedfingers/sabaoth-frontend:latest sabaoth-frontend:latest"
             }
         }
-
-        stage('Build Image - Backend') {
-            steps {
-                dir('backend') {
-                    script  {
-                        sshagent(['skey']) {
-                            sh "scp -o StrictHostKeyChecking=no -r * ubuntu@ip_addr_server:/home/ubuntu/"
-                        }
-                    }
-                }
-            }
-        }
-
-        stage('Test - Backend') {
-            steps {
-                dir('backend') {
-                    sh 'npm run test'
-                }
-            }
-        }
-        stage('Test - Frontend') {
-            steps {
-                dir('frontend') {
-                    sh 'npm run test'
-                }
-            }
-        }
-
-        stage('Deploy - Frontend') {
-            steps {
-                script {                    
-                    // Install and run the app on the server
-                     sshagent(['skey']) {                        
-                        sh "ssh -o StrictHostKeyChecking=no ubuntu@ip_addr_server 'sudo npm install && sudo pm2 start npm --name \"saba\" -- start'"
-                    }
-                    
-                    // Restart Nginx on the remote server
-                    sshagent(['skey']) {
-                        sh "ssh -o StrictHostKeyChecking=no ubuntu@ip_addr_server 'sudo service nginx restart && sudo pm2 restart \"saba\"'"
-                    }
-                }
-            }
-        }
-
-        stage('Deploy - Backend') {
-            steps {
-                script {                    
-                    // Install and run the app on the server
-                     sshagent(['skey']) {                        
-                        sh "ssh -o StrictHostKeyChecking=no ubuntu@ip_addr_server 'sudo npm install && sudo pm2 start npm --name \"saba\" -- start'"
-                    }
-                    
-                    // Restart Nginx on the remote server
-                    sshagent(['skey']) {
-                        sh "ssh -o StrictHostKeyChecking=no ubuntu@ip_addr_server 'sudo service nginx restart && sudo pm2 restart \"saba\"'"
-                    }
-                }
-            }
-        }
+      }
     }
+
+     stage('Push') {
+      steps {
+        dir ("frontend") {
+            withCredentials([usernamePassword(credentialsId: 'docker-login', passwordVariable: 'dockerHubPassword', usernameVariable: 'dockerHubUser')]) {
+            sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPassword}"
+            sh "docker push codedfingers/sabaoth-frontend:latest"
+        }
+        }
+      }
+    }
+
+    // stage('Run') {
+    //   steps {
+    //     // Stop and remove any existing containers
+    //     sh "docker stop sbaoth-frontend-container || true"
+    //     sh "docker rm sabaoth-frontend-container || true"
+
+    //     // Run the Docker image as a container
+    //     script {
+    //       // Tag the Docker image
+    //       sh "docker tag codedfingers/tare-backend:latest tare-backend:latest"
+    //     }
+    //   }
+    // }
+  }
 }
