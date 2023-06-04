@@ -1,0 +1,76 @@
+version: 2.1
+jobs:
+  build_frontend:
+    docker:
+      - image: circleci/node:latest
+    environment:
+      INSTANCE_IP_WEB: $INSTANCE_IP_WEB
+    steps:
+      - checkout
+      - run:
+          name: Install frontend dependencies
+          command: |
+            cd frontend
+            npm install
+      - run:
+          name: Build frontend
+          command: |
+            cd frontend
+            npm run build
+
+  deploy_frontend:
+    docker:
+      - image: circleci/node:latest
+    environment:
+      INSTANCE_IP_WEB: $INSTANCE_IP_WEB
+    steps:
+      - checkout
+      - run:
+          name: Install SSH and SCP
+          command: |
+            sudo apt update
+            sudo apt install -y openssh-client
+      - run:
+          name: Deploy frontend to instance 1
+          command: |
+            .circleci/deploy_frontend.sh
+
+  build_backend:
+    docker:
+      - image: node:14
+    environment:
+      INSTANCE_IP_APP: $INSTANCE_IP_APP
+    steps:
+      - checkout
+      - run:
+          name: Install backend dependencies
+          command: |
+            cd backend
+            npm install
+
+  deploy_backend:
+    docker:
+      - image: circleci/node:latest
+    environment:
+      INSTANCE_IP_WEB: $INSTANCE_IP_WEB
+    steps:
+      - checkout
+      - run:
+          name: Install SSH and SCP
+          command: |
+            sudo apt update
+            sudo apt install -y openssh-client
+            sudo apt install npm
+      - run:
+          name: Deploy backend
+          command: |
+            .circleci/deploy_backend.sh
+
+workflows:
+  version: 2
+  build_and_deploy:
+    jobs:
+      - build_frontend
+      - deploy_frontend
+      - build_backend
+      - deploy_backend
