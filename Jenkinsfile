@@ -44,19 +44,19 @@ pipeline {
       }
     }
 
-    stage('Deploy Frontend') {
-      steps {
-        // Stop and remove any existing containers
-        sh "docker stop sabaoth-frontend-container || true"
-        sh "docker rm sabaoth-frontend-container || true"
+    // stage('Deploy Frontend') {
+    //   steps {
+    //     // Stop and remove any existing containers
+    //     sh "docker stop sabaoth-frontend-container || true"
+    //     sh "docker rm sabaoth-frontend-container || true"
 
-        script {
-          // Install and run the app on the server
-            sshagent(['skey']) {                        
-              sh "ssh -o StrictHostKeyChecking=no ubuntu@ip_addr_server 'sudo npm install && sudo pm2 start npm --name \"saba\" -- start'"
-            }
-          }
-      }
-    }
+    //     script {
+    //       // Install and run the app on the server
+    //         sshagent(['skey']) {                        
+    //           sh "ssh -o StrictHostKeyChecking=no ubuntu@ip_addr_server 'sudo npm install && sudo pm2 start npm --name \"saba\" -- start'"
+    //         }
+    //       }
+    //   }
+    // }
   }
 }
