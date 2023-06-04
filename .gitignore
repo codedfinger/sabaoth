@@ -43,7 +43,8 @@ yarn-debug.log*
 yarn-error.log*
 
 #terraform
-terraform/
-te/
-new/
-.circleci
+# Exclude .terraform directory
+Iac/terraform/.terraform/*
+
+# Include files in terraform directory
+!terraform/*
