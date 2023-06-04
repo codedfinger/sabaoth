@@ -16,7 +16,7 @@ pipeline {
         // Load environment variables
         script {
             // Tag the Docker image
-            sh "docker build -t codedfingers/sabaoth-frontend:latest ."
+            sh "docker build --no-cache -t codedfingers/sabaoth-frontend:latest ."
             }
         }     
       }
