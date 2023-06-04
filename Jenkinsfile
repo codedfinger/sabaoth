@@ -44,18 +44,19 @@ pipeline {
       }
     }
 
-    // stage('Run') {
-    //   steps {
-    //     // Stop and remove any existing containers
-    //     sh "docker stop sbaoth-frontend-container || true"
-    //     sh "docker rm sabaoth-frontend-container || true"
+    stage('Deploy Frontend') {
+      steps {
+        // Stop and remove any existing containers
+        sh "docker stop sabaoth-frontend-container || true"
+        sh "docker rm sabaoth-frontend-container || true"
 
-    //     // Run the Docker image as a container
-    //     script {
-    //       // Tag the Docker image
-    //       sh "docker tag codedfingers/tare-backend:latest tare-backend:latest"
-    //     }
-    //   }
-    // }
+        script {
+          // Install and run the app on the server
+            sshagent(['skey']) {                        
+              sh "ssh -o StrictHostKeyChecking=no ubuntu@ip_addr_server 'sudo npm install && sudo pm2 start npm --name \"saba\" -- start'"
+            }
+          }
+      }
+    }
   }
 }
