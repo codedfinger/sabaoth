@@ -16,7 +16,7 @@ pipeline {
         // Load environment variables
         script {
             // Tag the Docker image
-            sh "docker build -t codedfingers/sabaoth-frontend:latest ."
+            sh "sudo docker build -t codedfingers/sabaoth-frontend:latest ."
             }
         }     
       }
@@ -27,7 +27,7 @@ pipeline {
         dir ("frontend") {
             script {
             // Tag the Docker image
-            sh "docker tag codedfingers/sabaoth-frontend:latest sabaoth-frontend:latest"
+            sh "sudo docker tag codedfingers/sabaoth-frontend:latest sabaoth-frontend:latest"
             }
         }
       }
@@ -37,8 +37,8 @@ pipeline {
       steps {
         dir ("frontend") {
             withCredentials([usernamePassword(credentialsId: 'docker-login', passwordVariable: 'dockerHubPassword', usernameVariable: 'dockerHubUser')]) {
-            sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPassword}"
-            sh "docker push codedfingers/sabaoth-frontend:latest"
+            sh "sudo docker login -u ${env.dockerHubUser} -p ${env.dockerHubPassword}"
+            sh "sudo docker push codedfingers/sabaoth-frontend:latest"
         }
         }
       }
