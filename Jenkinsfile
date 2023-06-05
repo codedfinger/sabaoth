@@ -53,7 +53,7 @@ pipeline {
         script {
           // Install and run the app on the server
             sshagent(['saba']) {                        
-              sh "ssh -o StrictHostKeyChecking=no ubuntu@ip_addr_server 'docker pull codedfingers/sabaoth-frontend:latest && docker run -p 3000:3000 codedfingers/sabaoth-frontend'"
+              sh "ssh -o StrictHostKeyChecking=no ubuntu@3.91.204.21 'docker pull codedfingers/sabaoth-frontend:latest && docker run -p 3000:3000 codedfingers/sabaoth-frontend'"
             }
           }
       }

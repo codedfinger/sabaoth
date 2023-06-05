@@ -44,7 +44,5 @@ yarn-error.log*
 
 #terraform
 # Exclude .terraform directory
-Iac/terraform/.terraform/*
+terraform/
 
-# Include files in terraform directory
-!terraform/*
