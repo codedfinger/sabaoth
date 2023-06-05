@@ -47,13 +47,15 @@ pipeline {
     stage('Deploy Frontend') {
       steps {
         // Stop and remove any existing containers
-        sh "docker stop sabaoth-frontend-container || true"
-        sh "docker rm sabaoth-frontend-container || true"
+        sh "docker stop codedfingerssabaoth-frontend || true"
+        sh "docker rm codedfingers/sabaoth-frontend || true"
+        sh "docker rmi codedfingers || true"
+
 
         script {
           // Install and run the app on the server
             sshagent(['saba']) {                        
-              sh "ssh -o StrictHostKeyChecking=no ubuntu@3.91.204.21 'sudo docker pull codedfingers/sabaoth-frontend:latest && sudo docker run -p 3000:3000 codedfingers/sabaoth-frontend'"
+              sh "ssh -o StrictHostKeyChecking=no ubuntu@3.82.222.234 'sudo docker pull codedfingers/sabaoth-frontend:latest && sudo docker run -p 3000:3000 codedfingers/sabaoth-frontend'"
             }
           }
       }

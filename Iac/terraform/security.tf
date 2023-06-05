@@ -68,7 +68,7 @@ resource "aws_security_group" "public_sg" {
       from_port       = 3000
       to_port         = 3000
       protocol        = "tcp"
-      security_groups = [aws_security_group.lb_sg.id]
+      cidr_blocks = ["0.0.0.0/0"]
   }
   
   egress {
@@ -110,7 +110,7 @@ resource "aws_security_group" "private_sg" {
       from_port       = 3001
       to_port         = 3001
       protocol        = "tcp"
-      security_groups = [aws_security_group.public_sg.id]
+      cidr_blocks = ["0.0.0.0/0"]
   }
   egress {
     from_port   = 0
