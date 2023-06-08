@@ -15,12 +15,23 @@ resource "aws_db_instance" "rds_primary_instances" {
   allocated_storage       = 20
   storage_type            = "gp2"
   backup_retention_period = 7
-  username                = "mydbadmin"
-  password                = "password"
+  username                = "codedfingers"
+  password                = "Kingkuntab430"
   vpc_security_group_ids  = [aws_security_group.rds_private_sg.id]
   db_subnet_group_name    = aws_db_subnet_group.db_subnet_group.name
   skip_final_snapshot     = true
+
   tags = {
     Name = "RDS-private-instance-${count.index + 1}"
   }
+
+  # # After the RDS instance is created, execute the script to create the database
+  # provisioner "local-exec" {
+  #   command = "bash create_database.sh"
+  #   environment = {
+  #     RDS_USERNAME        = "codedfingers"
+  #     RDS_PASSWORD        = "Kingkuntab430"
+  #     RDS_DATABASE_NAME   = "sabaoth"
+  #   }
+  # }
 }

@@ -1,0 +1,26 @@
+pipeline {
+  agent any
+
+  stages {
+
+    stage('Checkout') {
+      steps {
+        // Checkout the repository
+        checkout scm
+      }
+    }
+
+    stage('Copy files - Backend') {
+      steps {
+          dir('backend') {
+              script {
+                  sshagent(['saba']) {
+                      sh "scp -o StrictHostKeyChecking=no -o ProxyJump=ubuntu@3.83.223.231 -r * ubuntu@10.0.5.122:/home/ubuntu/"
+                      sh "ssh -o StrictHostKeyChecking=no -J ubuntu@3.83.223.231 ubuntu@10.0.5.122 'sudo npm install && sudo pm2 start npm --name \"saba\" -- start'"
+                  }
+              }
+          }
+      }
+}
+  }
+}

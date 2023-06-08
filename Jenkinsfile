@@ -47,9 +47,9 @@ pipeline {
     stage('Deploy Frontend') {
       steps {
         // Stop and remove any existing containers
-        sh "docker stop codedfingerssabaoth-frontend || true"
+        sh "docker stop codedfingers/sabaoth-frontend || true"
         sh "docker rm codedfingers/sabaoth-frontend || true"
-        sh "docker rmi codedfingers || true"
+        sh "docker rmi codedfingers/sabaoth-frontend || true"
 
 
         script {
