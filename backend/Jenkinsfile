@@ -23,7 +23,7 @@ pipeline {
                     sh "scp -o StrictHostKeyChecking=no -r * ubuntu@${bastionIP}:/home/ubuntu/"
 
                     // Step 2: Copy files from the bastion host to the private server
-                    sh "ssh -o StrictHostKeyChecking=no -i ${privateKeyPath} ubuntu@${bastionIP} 'mkdir -p /home/ubuntu/del && sudo scp -o StrictHostKeyChecking=no -r /home/ubuntu/* /home/ubuntu/del/'"
+                    sh "ssh -o StrictHostKeyChecking=no -i ${privateKeyPath} ubuntu@${bastionIP} 'mkdir -p /home/ubuntu/del && sudo scp -o StrictHostKeyChecking=no -r /home/ubuntu/* /del/'"
 
                     // Step 3: Execute commands on the private server
                     //sh "ssh -o StrictHostKeyChecking=no -i ${privateKeyPath} -J ubuntu@${bastionIP} ubuntu@${privateIP} 'sudo npm install && sudo pm2 start npm --name \"saba\" -- start'"
