@@ -12,7 +12,7 @@ pipeline {
 
     stage('Copy files - Backend') {
         steps {
-          dir(backend) {
+          dir("backend") {
             script {
                 sshagent(['saba']) {
                     def bastionIP = '3.83.223.231'
