@@ -26,7 +26,7 @@ pipeline {
                       sh "ssh -o StrictHostKeyChecking=no -i ${privateKeyPath} -J ubuntu@${bastionIP} ubuntu@${privateIP} 'mkdir -p backend && sudo scp -o StrictHostKeyChecking=no -r /home/ubuntu/* /backend/'"
 
                       // Step 3: Execute commands on the private server
-                      sh "ssh -o StrictHostKeyChecking=no -i ${privateKeyPath} -J ubuntu@${bastionIP} ubuntu@${privateIP} 'cd backend && sudo npm install && sudo pm2 start npm --name \"saba\" -- start'"
+                      //sh "ssh -o StrictHostKeyChecking=no -i ${privateKeyPath} -J ubuntu@${bastionIP} ubuntu@${privateIP} 'cd backend && sudo npm install && sudo pm2 start npm --name \"saba\" -- start'"
                   }
                 } 
             }
