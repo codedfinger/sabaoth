@@ -12,8 +12,9 @@ pipeline {
 
     stage('Copy files - Backend') {
         steps {
+          dir(backend) {
             script {
-                sshagent(['skey']) {
+                sshagent(['saba']) {
                     def bastionIP = '3.83.223.231'
                     def privateIP = '10.0.5.122'
                     def privateKeyPath = '/home/ubuntu/saba.pem'
@@ -28,6 +29,7 @@ pipeline {
                     //sh "ssh -o StrictHostKeyChecking=no -i ${privateKeyPath} -J ubuntu@${bastionIP} ubuntu@${privateIP} 'sudo npm install && sudo pm2 start npm --name \"saba\" -- start'"
                 }
             }
+          }
         }
     }
 
