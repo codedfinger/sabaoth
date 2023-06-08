@@ -11,26 +11,27 @@ pipeline {
     }
 
     stage('Copy files - Backend') {
-      steps {
-            script {
-              dir("backend") {
+    steps {
+        script {
+            dir("backend") {
                 sshagent(['saba']) {
-                      def bastionIP = '3.83.223.231'
-                      def privateIP = '10.0.5.122'
-                      def privateKeyPath = '/home/ubuntu/saba.pem'
+                    def bastionIP = '3.83.223.231'
+                    def privateIP = '10.0.5.122'
+                    def privateKeyPath = '/home/ubuntu/saba.pem'
 
-                      // Step 1: Copy files from Jenkins to the bastion host
-                      sh "scp -o StrictHostKeyChecking=no -r * ubuntu@${bastionIP}:/home/ubuntu/"
+                    // Step 1: Copy files from Jenkins to the bastion host
+                    sh "scp -o StrictHostKeyChecking=no -r * ubuntu@${bastionIP}:/home/ubuntu/"
 
-                      // Step 2: Copy files from the bastion host to the private server
-                      sh "ssh -o StrictHostKeyChecking=no -i ${privateKeyPath} -J ubuntu@${bastionIP} ubuntu@${privateIP} 'mkdir -p backend && sudo scp -o StrictHostKeyChecking=no -r /home/ubuntu/* /backend/'"
+                    // Step 2: Copy files from the bastion host to the private server
+                    sh "ssh -o StrictHostKeyChecking=no -i ${privateKeyPath} ubuntu@${bastionIP} 'ssh -o StrictHostKeyChecking=no -i ${privateKeyPath} ubuntu@${privateIP} \"mkdir -p /home/ubuntu/backend/ && scp -o StrictHostKeyChecking=no -r /home/ubuntu/* ubuntu@${privateIP}:/home/ubuntu/backend/\"'"
 
-                      // Step 3: Execute commands on the private server
-                      //sh "ssh -o StrictHostKeyChecking=no -i ${privateKeyPath} -J ubuntu@${bastionIP} ubuntu@${privateIP} 'cd backend && sudo npm install && sudo pm2 start npm --name \"saba\" -- start'"
-                  }
-                } 
+                    // Step 3: Execute commands on the private server
+                    // sh "ssh -o StrictHostKeyChecking=no -i ${privateKeyPath} -J ubuntu@${bastionIP} ubuntu@${privateIP} 'cd /home/ubuntu/backend && sudo npm install && sudo pm2 start npm --name \"saba\" -- start'"
+                }
             }
-          }
+        }
     }
+}
+
   }
 }
