@@ -29,7 +29,6 @@ pipeline {
                     sudo mkdir -p /home/ubuntu/backend/ &&
                     sudo chown -R ubuntu:ubuntu /home/ubuntu/backend &&
                     sudo scp -o StrictHostKeyChecking=no -i ${privateKeyPath} -r /home/ubuntu/* ubuntu@${privateIP}:/home/ubuntu/backend &&
-                    sudo npm install &&
                     '
                     """
 
