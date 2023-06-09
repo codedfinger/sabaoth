@@ -27,7 +27,7 @@ pipeline {
                     ssh -o StrictHostKeyChecking=no -i ${privateKeyPath} ubuntu@${bastionIP} \
                     ssh -o StrictHostKeyChecking=no -i ${privateKeyPath} ubuntu@${privateIP} '\
                     sudo mkdir -p /home/ubuntu/backend/ && \
-                    scp -o StrictHostKeyChecking=no -i ${privateKeyPath} -r /home/ubuntu/* ubuntu@${privateIP}:/home/ubuntu/backend \
+                    sudo scp -o StrictHostKeyChecking=no -i ${privateKeyPath} -r /home/ubuntu/* ubuntu@${privateIP}:/home/ubuntu/backend \
                     '
                     """
 
