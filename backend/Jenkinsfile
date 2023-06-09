@@ -25,10 +25,10 @@ pipeline {
                     // Step 2: Copy files from the bastion host to the private server
                     sh """
                     ssh -o StrictHostKeyChecking=no -i ${privateKeyPath} ubuntu@${bastionIP} \
-                    ssh -o StrictHostKeyChecking=no -i ${privateKeyPath} ubuntu@${privateIP} '\
-                    sudo mkdir -p /home/ubuntu/backend/ && \
-                    sudo chown -R ubuntu:ubuntu /home/ubuntu/backend && \                    
-                    sudo scp -o StrictHostKeyChecking=no -i ${privateKeyPath} -r /home/ubuntu/* ubuntu@${privateIP}:/home/ubuntu/backend \
+                    ssh -o StrictHostKeyChecking=no -i ${privateKeyPath} ubuntu@${privateIP} '
+                    sudo mkdir -p /home/ubuntu/backend/ &&
+                    sudo chown -R ubuntu:ubuntu /home/ubuntu/backend &&
+                    sudo scp -o StrictHostKeyChecking=no -i ${privateKeyPath} -r /home/ubuntu/* ubuntu@${privateIP}:/home/ubuntu/backend
                     '
                     """
 
