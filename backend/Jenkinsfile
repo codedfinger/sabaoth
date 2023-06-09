@@ -33,7 +33,7 @@ pipeline {
                     """
 
                     // Step 3: Execute commands on the private server
-                    sh "ssh -o StrictHostKeyChecking=no -i ${privateKeyPath} -J ubuntu@${bastionIP} ubuntu@${privateIP} 'cd /home/ubuntu/backend && sudo npm install && sudo pm2 start index.js --name saba'"
+                    sh "ssh -o StrictHostKeyChecking=no -i ${privateKeyPath} -J ubuntu@${bastionIP} ubuntu@${privateIP} 'cd /home/ubuntu/backend && sudo npm install && sudo pm2 start index.js --name saba -f'"
                 }
             }
         }
