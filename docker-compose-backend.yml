@@ -1,0 +1,7 @@
+version: '3'
+services:
+  backend:
+    image: your-docker-registry-url/saba-backend:1.0  # Update with your actual Docker registry URL and version
+    ports:
+      - "8081:80"
+    restart: always

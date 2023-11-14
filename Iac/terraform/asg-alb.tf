@@ -67,65 +67,65 @@ resource "aws_autoscaling_group" "private_autoscaling_group" {
 
 
 # # Define a scaling policy to increase the number of instances when CPU utilization is above 80%
-# resource "aws_autoscaling_policy" "scale_up_policy_public" {
-#   name                   = "public-webtier-scale-up-policy"
-#   autoscaling_group_name = aws_autoscaling_group.public_webtier_autoscaling_group.name
-#   adjustment_type        = "ChangeInCapacity"
-#   cooldown               = 300
-#   policy_type            = "SimpleScaling"
-#   scaling_adjustment     = 1
+resource "aws_autoscaling_policy" "scale_up_policy_public" {
+  name                   = "public-webtier-scale-up-policy"
+  autoscaling_group_name = aws_autoscaling_group.public_webtier_autoscaling_group.name
+  adjustment_type        = "ChangeInCapacity"
+  cooldown               = 300
+  policy_type            = "SimpleScaling"
+  scaling_adjustment     = 1
 
-#   metric_aggregation_type = "Average"
-# }
+  metric_aggregation_type = "Average"
+}
 
-# # Define a scaling policy to increase the number of instances when CPU utilization is above 80%
-# resource "aws_autoscaling_policy" "scale_up_policy_private" {
-#   name                   = "private-scale-up-policy"
-#   autoscaling_group_name = aws_autoscaling_group.private_autoscaling_group.name
-#   adjustment_type        = "ChangeInCapacity"
-#   cooldown               = 300
-#   policy_type            = "SimpleScaling"
-#   scaling_adjustment     = 1
+# Define a scaling policy to increase the number of instances when CPU utilization is above 80%
+resource "aws_autoscaling_policy" "scale_up_policy_private" {
+  name                   = "private-scale-up-policy"
+  autoscaling_group_name = aws_autoscaling_group.private_autoscaling_group.name
+  adjustment_type        = "ChangeInCapacity"
+  cooldown               = 300
+  policy_type            = "SimpleScaling"
+  scaling_adjustment     = 1
 
-#   metric_aggregation_type = "Average"
-# }
+  metric_aggregation_type = "Average"
+}
 
 
-# # Trigger the scale-up policy when CPU utilization is above 80% for 2 consecutive periods
-# resource "aws_cloudwatch_metric_alarm" "cpu_utilization_scale_up_public" {
-#   alarm_name          = "public-webtier-cpu-utilization-scale-up"
-#   comparison_operator = "GreaterThanOrEqualToThreshold"
-#   evaluation_periods  = 2
-#   metric_name         = "CPUUtilization"
-#   namespace           = "AWS/EC2"
-#   period              = 60
-#   statistic           = "Average"
-#   threshold           = 15
-#   alarm_description   = "Scale up the number of instances when CPU utilization is above 80% for 2 consecutive periods"
-#   alarm_actions       = [aws_autoscaling_policy.scale_up_policy_public.arn]
+# Trigger the scale-up policy when CPU utilization is above 80% for 2 consecutive periods
+resource "aws_cloudwatch_metric_alarm" "cpu_utilization_scale_up_public" {
+  alarm_name          = "public-webtier-cpu-utilization-scale-up"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = 2
+  metric_name         = "CPUUtilization"
+  namespace           = "AWS/EC2"
+  period              = 60
+  statistic           = "Average"
+  threshold           = 15
+  alarm_description   = "Scale up the number of instances when CPU utilization is above 80% for 2 consecutive periods"
+  alarm_actions       = [aws_autoscaling_policy.scale_up_policy_public.arn]
 
-#   dimensions = {
-#     AutoScalingGroupName = aws_autoscaling_group.public_webtier_autoscaling_group.name
-#   }
-# }
+  dimensions = {
+    AutoScalingGroupName = aws_autoscaling_group.public_webtier_autoscaling_group.name
+  }
+}
 
-# # Trigger the scale-up policy when CPU utilization is above 80% for 2 consecutive periods
-# resource "aws_cloudwatch_metric_alarm" "cpu_utilization_scale_up_private" {
-#   alarm_name          = "private-cpu-utilization-scale-up"
-#   comparison_operator = "GreaterThanOrEqualToThreshold"
-#   evaluation_periods  = 2
-#   metric_name         = "CPUUtilization"
-#   namespace           = "AWS/EC2"
-#   period              = 60
-#   statistic           = "Average"
-#   threshold           = 15
-#   alarm_description   = "Scale up the number of instances when CPU utilization is above 80% for 2 consecutive periods"
-#   alarm_actions       = [aws_autoscaling_policy.scale_up_policy_private.arn]
+# Trigger the scale-up policy when CPU utilization is above 80% for 2 consecutive periods
+resource "aws_cloudwatch_metric_alarm" "cpu_utilization_scale_up_private" {
+  alarm_name          = "private-cpu-utilization-scale-up"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = 2
+  metric_name         = "CPUUtilization"
+  namespace           = "AWS/EC2"
+  period              = 60
+  statistic           = "Average"
+  threshold           = 15
+  alarm_description   = "Scale up the number of instances when CPU utilization is above 80% for 2 consecutive periods"
+  alarm_actions       = [aws_autoscaling_policy.scale_up_policy_private.arn]
 
-#   dimensions = {
-#     AutoScalingGroupName = aws_autoscaling_group.private_autoscaling_group.name
-#   }
-# }
+  dimensions = {
+    AutoScalingGroupName = aws_autoscaling_group.private_autoscaling_group.name
+  }
+}
 
 
 
