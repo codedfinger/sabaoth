@@ -60,7 +60,7 @@ pipeline {
         stage('Test - Frontend') {
             steps {
                 dir('hapi-frontend') {
-                    sh 'npm run test'
+                    sh 'npm test'
                 }
             }
         }
