@@ -18,9 +18,9 @@ pipeline {
         stage('Build and Push Docker Image - Frontend') {
             steps {
                 script {
-                    dir('frontend') {
+                    dir('hapi-frontend') {
                         // Build Docker image
-                        sh "docker build -t $DOCKER_REGISTRY_URL/saba-frontend:$VERSION ."
+                        sh "docker build --no-cache -t $DOCKER_REGISTRY_URL/saba-frontend:$VERSION ."
                         
                         // Push Docker image to registry
                         withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: "$DOCKER_REGISTRY_CREDENTIALS", usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASSWORD']]) {
@@ -59,7 +59,7 @@ pipeline {
 
         stage('Test - Frontend') {
             steps {
-                dir('frontend') {
+                dir('hapi-frontend') {
                     sh 'npm run test'
                 }
             }
