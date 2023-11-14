@@ -20,7 +20,7 @@ pipeline {
                 script {
                     dir('hapi-frontend') {
                         // Build Docker image
-                        sh "docker build -t $DOCKER_REGISTRY_URL/saba-frontend:$VERSION ."
+                        sh "docker build -t $DOCKER_REGISTRY_URL/saba-frontend:latest ."
                         
                         // Push Docker image to registry
                         withCredentials([usernamePassword(credentialsId: 'docker-login', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USER')]) {
