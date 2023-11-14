@@ -51,6 +51,13 @@ pipeline {
         //     }
         // }
 
+        // stage('Test - Backend') {
+        //     steps {
+        //         dir('backend') {
+        //             sh 'npm run test'
+        //         }
+        //     }
+        // }
 
         stage('Test - Frontend') {
             steps {
@@ -76,6 +83,10 @@ pipeline {
                         sh "ssh -o StrictHostKeyChecking=no ubuntu@$REMOTE_SERVER_IP 'cd /home/ubuntu/ && docker-compose -f docker-compose-frontend.yml up -d'"
 
                     }
+
+                    // SSH into the server and run Docker Compose
+                    // sshagent(credentials: [SSH_CREDENTIALS]) {
+                    // }
                 }
             }
         }
