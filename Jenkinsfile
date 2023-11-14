@@ -70,7 +70,7 @@ pipeline {
             steps {
                 script {
                     // Pull Docker image from registry
-                    withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: "$DOCKER_REGISTRY_CREDENTIALS", usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASSWORD']]) {
+                    withCredentials([usernamePassword(credentialsId: 'docker-login', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USER')]) {
                         sh "docker login -u $DOCKER_USER -p $DOCKER_PASSWORD $DOCKER_REGISTRY_URL"
                         sh "docker pull $DOCKER_REGISTRY_URL/saba-frontend:$VERSION"
                     }
