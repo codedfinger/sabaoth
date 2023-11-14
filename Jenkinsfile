@@ -78,7 +78,7 @@ pipeline {
                     }
 
                     // Copy Docker Compose file to the server
-                    sshagent(credentials: [SSH_CREDENTIALS]) {
+                    sshagent(credentials: ['ssh-key']) {
                         sh "scp -o StrictHostKeyChecking=no docker-compose-frontend.yml ubuntu@$REMOTE_SERVER_IP:/home/ubuntu/"
                         sh "ssh -o StrictHostKeyChecking=no ubuntu@$REMOTE_SERVER_IP 'cd /home/ubuntu/ && docker-compose -f docker-compose-frontend.yml up -d'"
 
