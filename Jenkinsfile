@@ -12,6 +12,8 @@ pipeline {
         DOCKER_REGISTRY_CREDENTIALS = credentials('docker-login')
         REMOTE_SERVER_IP = "54.226.250.4"
         VERSION = "1.0"
+        SSH_CREDENTIALS = credentials('ssh-key')
+
     }
     stages {
 
@@ -76,14 +78,15 @@ pipeline {
                     }
 
                     // Copy Docker Compose file to the server
-                    sshagent(['saba']) {
+                    sshagent(credentials: [SSH_CREDENTIALS]) {
                         sh "scp -o StrictHostKeyChecking=no docker-compose-frontend.yml ubuntu@$REMOTE_SERVER_IP:/home/ubuntu/"
+                        sh "ssh -o StrictHostKeyChecking=no ubuntu@$REMOTE_SERVER_IP 'cd /home/ubuntu/ && docker-compose -f docker-compose-frontend.yml up -d'"
+
                     }
 
                     // SSH into the server and run Docker Compose
-                    sshagent(['saba']) {
-                        sh "ssh -o StrictHostKeyChecking=no ubuntu@$REMOTE_SERVER_IP 'cd /home/ubuntu/ && docker-compose -f docker-compose-frontend.yml up -d'"
-                    }
+                    // sshagent(credentials: [SSH_CREDENTIALS]) {
+                    // }
                 }
             }
         }
