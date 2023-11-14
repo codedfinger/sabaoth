@@ -8,7 +8,7 @@ pipeline {
         booleanParam(name: 'executeTests', description: 'Execute the tests', defaultValue: false)
     }
     environment {
-        DOCKER_REGISTRY_URL = "docker.io"
+        DOCKER_REGISTRY_URL = "https://hub.docker.com/u/codedfingers"
         DOCKER_REGISTRY_CREDENTIALS = credentials('docker-login')
         REMOTE_SERVER_IP = "54.226.250.4"
         VERSION = "1.0"
