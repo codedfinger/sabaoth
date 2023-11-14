@@ -60,6 +60,7 @@ pipeline {
         stage('Test - Frontend') {
             steps {
                 dir('hapi-frontend') {
+                    sh 'npm install'
                     sh 'npm test'
                 }
             }
