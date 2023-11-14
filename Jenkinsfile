@@ -8,7 +8,7 @@ pipeline {
         booleanParam(name: 'executeTests', description: 'Execute the tests', defaultValue: false)
     }
     environment {
-        DOCKER_REGISTRY_URL = "https://hub.docker.com/u/codedfingers"
+        DOCKER_REGISTRY_URL = "codedfingers"
         DOCKER_REGISTRY_CREDENTIALS = credentials('docker-login')
         REMOTE_SERVER_IP = "54.226.250.4"
         VERSION = "1.0"
@@ -20,7 +20,7 @@ pipeline {
                 script {
                     dir('hapi-frontend') {
                         // Build Docker image
-                        sh "docker build -t $DOCKER_REGISTRY_URL/saba-frontend:latest ."
+                        sh "docker build -t $DOCKER_REGISTRY_URL/saba-frontend:$VERSION ."
                         
                         // Push Docker image to registry
                         withCredentials([usernamePassword(credentialsId: 'docker-login', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USER')]) {
